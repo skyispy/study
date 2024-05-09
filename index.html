@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    setTimeout(()=>{
+        console.log("안녕");
+    }, 5000);
+    const promise = new Promise((res, rej) => {
+        // 비동기 처리 구문
+        // setTimeout
+        setTimeout(()=>{
+            res("성공했어");
+        }, 5000)
+        setTimeout(() => {
+            rej("실패했어")
+        }, 3000);
+    })
+
+    promise
+        .then((result) => { console.log(result) }) // 비동기 처리 이후에 반환된 값도 비동기 처리(대기상태의 객체)를 해야하는 경우 
+        .then((result2) => { console.log(result2) }) // 비동기 처리를 한번더 하고 result2에 반환한다.
+        .catch((error) => { console.log(error) });
+
+        function callback(fn) {
+        fn();
+    }
+    // 콜백 지옥
+    callback(() => {
+        console.log("안녕1");
+        callback(() => {
+            console.log("안녕2");
+            callback(() => {
+                console.log("안녕3");
+                callback(() => {
+                    console.log("안녕2");
+                    callback(() => {
+                        console.log("안녕3");
+                        callback(() => {
+                            console.log("안녕2");
+                            callback(() => {
+                                console.log("안녕3");
+                                callback(() => {
+                                    console.log("안녕2");
+                                    callback(() => {
+                                        console.log("안녕3");
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        })
+    })
+
+    const num = 10;
+    const promise2 = new Promise((res, rej)=>{
+        if(num > 5) {
+                res("num이 5보다 크다");
+        }else { 
+            rej("mum이 5보다 작아");
+        }
+    });
+    promise2.then((result)=>{console.log(result)}).then().catch((error)=>{console.log(error)});
+    // function add(num){
+    //     return num + 1;
+    // }
+    // function addPromise(addfn, num) {
+    //     return new Promise((res, rej)=>{
+    //         // 코드를 작성하는 문법에 따라 다른데
+
+    //         // 서버에서 데이터를 요청
+    //         const data = // 요청을 하는 코드를 post, get 응답을 받기 전까지 기다리고
+    //         // {result : "성공", date : "db에서 가져온 데이터"} || {result : "실패"}
+    //         if(data.result === "성공"){
+    //             // 성공을 하면 호출해서 성공의 여부를 출력해줄 함수
+    //             res({result : "성공", date : "db에서 가져온 데이터"});
+    //         }else if(data.result === "실패"){
+    //             // 실패를 하면 호출해서 실패의 여부를 출력해줄 함수
+    //             rej("실패");
+    //         }
+
+    //     })
+    // }
+
+    // addPromise(add, 1).then((result)=>{console.log(result)})
+
+    // addPromise => {Promise 생성자 함수 콜백함수가 전달되고 (res, rej) => {우리가 작성한 함수의 내용}}
+    // Promise.then(콜백함수) === 메서드, 반환 값은 { Promise }, then의 콜백 함수가 호출되는 시기는 
+    // Promise 객체에서 첫번째로 전달한 매개변수에 인자값이 함수인데 이 함수가 호출되면 then에 전달한 콜백함수를 호출하는데
+    // 매개변수의 인자값으로 첫번째 매개변수로 전달받은 인자값의 함수가 호출될 때 전달한 인자값이 전달된다.
+
+    // res는 Promise 생성할 때 콜백으로 전달한 함수의 첫번째 인자값 === 함수
+    // res("성공의 결과값");
+    // Promist 객체의 then 메서드로 전달한 콜백함수의 내용을 호출한다.
+    // then에 전달한 콜백함수를 호출할 때 첫번째 인자값으로 전달해준다.
+    // ("성공의 결과값") => { console.log("성공의 결과값") };
+
+
+    // const promise3 = new Promise((res, rej)=>{
+    //     // 서버에 요청을 보냈다.
+    //     const _res = {result : "성공", data : [{id : 1, name : 2, age : 3}, {id : 1, name : 2, age : 3}]}
+    //     if(_res.result === "성공"){
+    //         res(_res);
+    //     }else{
+    //         rej("error 데이터 요청 실패");
+    //     }
+    // })
+
+    // // promise3.then(({data}) => {console.log(data)})
+    // promise3.then((res) => {console.log(res.data)}).catch((err) => {console.log(err)})
+
+
+    const callbackPromise = (text, time) =>{
+        return new Promise((res, rej)=>{
+            try{
+                // 코드가 정상적으로 실행되면
+                // 비동기 처리
+                setTimeout(()=>{
+                    res(text);
+                }, time);
+            }catch(e){
+                // 코드가 정상적으로 실행되지 않으면
+                rej(e);
+            }
+        })
+    }
+    callbackPromise("text 0", 1000)
+    .then((result)=>{
+        // then은 promise가 성공하면 전달한 콜백함수 호출
+        console.log(result);
+        return callbackPromise("text 1", 1000); // 반환되는 promise 객체 안에 result값으로 할당한다.
+    })
+    .then((result)=>{
+        console.log(result);
+        return callbackPromise("text 2", 1000);
+    })
+    .then((result)=>{
+        console.log(result);
+        return callbackPromise("text 3", 1000);
+    })
+    .catch((result)=>{
+        // catch는 실패가 되면 호출되며 실행되는 콜백함수
+        console.log(result);
+    });
+    
+    // async를 붙인 함수는 반환이 Pro]mise
+    const asyncFn = async () => {
+        try{
+            // const test1 = callbackPromise("text 1", 1000);
+            // Promise 객체의 대기 상태
+        
+            const test1 = await callbackPromise("text 1", 1000);
+            // await 뒤에 promise 대기 상태이면 코드를 밑으로 진행시키지 않는다.
+            // promise 객체의 대기 이후에 처리 결과를 반환
+            console.log(test1)
+        
+            const text2 = await callbackPromise("text 2", 1000);
+            console.log(test2);
+            
+            const text3 = await callbackPromise("text 3", 1000);
+            console.log(test3);
+            return test1;
+        }catch(e){
+            console.log(e);
+        }
+    }
+    console.log(asyncFn());
+    
+    async function a() {
+        await asyncFn();
+        console.log("안녕")
+    }
+</script>
+</html>  

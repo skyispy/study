@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    let num = 0;
+    const uppromise = (count, time) => {
+        return new Promise((res, rej)=>{
+       try{
+        setTimeout(() => {
+            res(count + 1);
+        }, time);
+        if(count >= 5){
+                rej("끝");  
+        } 
+       }catch{
+        rej("끝");
+       }
+    })
+}
+    // const uppromise2 = new Promise((res, rej)=>{
+    //     if(num < 5) {
+    //             setTimeout(()=>{
+    //             res(2);
+    //             }, 2000)
+    //     } else{
+    //         rej("끝");
+    //     }
+    // });
+    // const uppromise3 = new Promise((res, rej)=>{
+    //     if(num < 5) {
+    //             setTimeout(()=>{
+    //             res(3);
+    //             }, 3000)
+    //     } else{
+    //         rej("끝");
+    //     }
+    // });
+    // const uppromise4 = new Promise((res, rej)=>{
+    //     if(num < 5) {
+    //             setTimeout(()=>{
+    //             res(4);
+    //             }, 4000)
+    //     } else{
+    //         rej("끝");
+    //     }
+    // });
+    // const uppromise5 = new Promise((res, rej)=>{
+    //     if(num < 5) {
+    //             setTimeout(()=>{
+    //             res(5);
+    //             }, 5000)
+    //     } else{
+    //         rej("끝");
+    //     }
+    // });
+    // uppromise(0, 1000)
+    // .then((result)=>{
+    //     console.log(result)
+    //     return uppromise(1, 2000)
+    // })
+    // .then((result)=>{
+    //     console.log(result)
+    //     return uppromise(2, 3000)
+    // })
+    // .then((result)=>{
+    //     console.log(result)
+    //     return uppromise(3, 3000)
+    // })
+    // .then((result)=>{
+    //     console.log(result)
+    //     return uppromise(4, 3000)
+    // })
+    // .then((result)=>{
+    //     console.log(result)
+    //     return uppromise(5, 3000)
+    // })
+    // .catch((end)=>{console.log(end)})
+    // uppromise2.then((result)=>{console.log(result)}).catch((end)=>{console.log(end)});
+    // uppromise3.then((result)=>{console.log(result)}).catch((end)=>{console.log(end)});
+    // uppromise4.then((result)=>{console.log(result)}).catch((end)=>{console.log(end)});
+    // uppromise5.then((result)=>{console.log(result)}).catch((end)=>{console.log(end)});
+    const upasync = async () => {
+        try{
+            for(let i = 0; i< 6; i++){
+                    const pro = await uppromise(i, 1000);
+                    console.log(pro);
+                }
+        }catch(e){
+            console.log(e);
+        }
+    }
+    console.log(upasync());
+</script>
+</html>
